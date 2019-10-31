@@ -69,10 +69,10 @@ setwd("C://Users//jessm//OneDrive//Documents//Columbia University//Fall 2019//ST
 
 Provide directories for training images. Training images and Training fiducial points will be in different subfolders. 
 ```{r}
-train_dir <- "../data/train_set/" # This will be modified for different data sets.
+train_dir <- "..//data//test_set_sec2//test_set_sec2/" # This will be modified for different data sets.
 train_image_dir <- paste(train_dir, "images/", sep="")
 train_pt_dir <- paste(train_dir,  "points/", sep="")
-train_label_path <- paste(train_dir, "label.csv", sep="") 
+train_label_path <- paste(train_dir, "labels_prediction.csv", sep="") 
 ```
 
 ### Step 1: set up controls for evaluation experiments.
@@ -152,6 +152,8 @@ if(run.feature.test){
   tm_feature_testBaseline <- system.time(dat_testBaseline <- featureBaseline(fiducial_pt_list, test_idx))
 }
 
+colnames(dat_testBaseline)[6006] = 'feature6006'
+
 # save(dat_trainBaseline, file="../output/feature_trainBaseline.RData")
 save(dat_testBaseline, file="../output/feature_testBaseline.RData")
 
@@ -165,6 +167,8 @@ tm_feature_test <- NA
 if(run.feature.test){
   tm_feature_test <- system.time(dat_test <- featureOurModel(fiducial_pt_list, test_idx))
 }
+
+colnames(dat_test)[3003] = 'feature3003'
 
 # save(dat_train, file="../output/feature_trainOurModel.RData")
 save(dat_test, file="../output/feature_testOurModel.RData")
@@ -242,15 +246,21 @@ if(run.test){
 ```{r}
 predictionGBM <- as.factor(apply(predictionGBM, 1, which.max))
 
-accuBaseline <- mean(dat_testBaseline$emotion_idx == predictionGBM)
-cat("The accuracy of baseline model: is", accuBaseline*100, "%.\n")
-confusionMatrix(predictionGBM, dat_test$emotion_idx)
+# accuBaseline <- mean(dat_testBaseline$emotion_idx == predictionGBM)
+# cat("The accuracy of baseline model: is", accuBaseline*100, "%.\n")
+# confusionMatrix(predictionGBM, dat_test$emotion_idx)
 # unique(predictionGBM)
 # unique(dat_testBaseline$emotion_idx)
 
-accu <- mean(dat_test$emotion_idx == predictionSVM)
-cat("The accuracy of our model: is", accu*100, "%.\n")
-confusionMatrix(predictionSVM, dat_test$emotion_idx)
+# accu <- mean(dat_test$emotion_idx == predictionSVM)
+# cat("The accuracy of our model: is", accu*100, "%.\n")
+# confusionMatrix(predictionSVM, dat_test$emotion_idx)
+
+res = cbind(as.numeric(predictionGBM),as.numeric(predictionSVM))
+baseLineAndOurModel = as.data.frame(res)
+colnames(baseLineAndOurModel) = c('baseline','final_model')
+write.csv(baseLineAndOurModel, file = "../output/baseLineAndOurModel.csv")
+
 # unique(predictionSVM)
 # unique(dat_test$emotion_idx)
 ```
