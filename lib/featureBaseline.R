@@ -35,7 +35,7 @@ featureBaseline <- function(input_list = fiducial_pt_list, index){
   ### convert matrix to data frame
   pairwise_data <- as.data.frame(pairwise_data)
   ### convert label column to factor
-  pairwise_data$emotion_idx <- as.factor(pairwise_data$emotion_idx)
+ # pairwise_data$emotion_idx <- as.factor(pairwise_data$emotion_idx)
   
   return(feature_df = pairwise_data)
 }
