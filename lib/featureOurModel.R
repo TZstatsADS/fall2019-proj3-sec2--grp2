@@ -20,6 +20,6 @@ featureOurModel <- function(input_list=fiducial_pt_list, index){
   pairwise_data <- cbind(pairwise_dist_feature, info$emotion_idx[index])
   colnames(pairwise_data) <- c(paste("feature", 1:(ncol(pairwise_data)-1), sep = ""), "emotion_idx")
   pairwise_data <- as.data.frame(pairwise_data)
-  pairwise_data$emotion_idx <- as.factor(pairwise_data$emotion_idx)
+  # pairwise_data$emotion_idx <- as.factor(pairwise_data$emotion_idx)
   return(feature_df = pairwise_data)
 }
