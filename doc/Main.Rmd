@@ -62,7 +62,7 @@ library(gbm)
 ### Step 0 set work directories
 ```{r wkdir}
 set.seed(0)
-setwd("C://Users//jessm//OneDrive//Documents//Columbia University//Fall 2019//STAT 5243 - Applied Data Science//Projects//Project 3//Project 3 - Final Submission//doc")
+setwd("C://Users//jessm//OneDrive//Documents//Columbia University//Fall 2019//STAT 5243 - Applied Data Science//Projects//Project 3//Project 3 - Final Submission - Copy//doc")
 # here replace it with your own path or manually set it in RStudio to where this rmd file is located. 
 # use relative path for reproducibility
 ```
@@ -188,7 +188,8 @@ Call the train model and test model from library.
 * Train the model with the entire training set using the selected model (model parameter) via cross-validation.
 ```{r final_train}
 load(file="../data/varImp.RData")
-
+# # source("../lib/trainOurModel.R")
+# 
 # num_of_var <- c(50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000)
 # #,700,900,1200,1800,2400,3003)
 # 
@@ -196,10 +197,10 @@ load(file="../data/varImp.RData")
 # for(i in num_of_var){
 # 
 #   training <- dat_train %>% dplyr::select(b[1:i],emotion_idx)
-#   
+# 
 #   svm_model = svm(emotion_idx ~ ., data=training
 #              , kernel = "linear", ranges = list(cost = c(.001,0.01,0,1,5,10,100)))
-#              
+# 
 #   predictionSVM <- predict(svm_model, dat_test[ , !(names(dat_test) %in% "emotion_idx")])
 #   res = confusionMatrix(predictionSVM, dat_test$emotion_idx)
 #   accuracy = res$overall[1]
@@ -210,12 +211,12 @@ load(file="../data/varImp.RData")
 
 source("../lib/trainBaseline.R")
 tm_trainBaseline=NA
-tm_trainBaseline <- system.time(fitGBM <- trainBaseline(trainingData = dat_trainBaseline, desiredDistribution = "multinomial", desiredNumberOfTrees = 300, desiredShrinkage = 0.1, desiredInteractionDepth = 2, desiredNobs = 10, desiredCVFolds = 10))
+# tm_trainBaseline <- system.time(fitGBM <- trainBaseline(trainingData = dat_trainBaseline, desiredDistribution = "multinomial", desiredNumberOfTrees = 300, desiredShrinkage = 0.1, desiredInteractionDepth = 2, desiredNobs = 10, desiredCVFolds = 10))
+tm_trainBaseline <- system.time(fitGBM <- trainBaseline(trainingData = dat_trainBaseline, desiredDistribution = "multinomial", desiredNumberOfTrees = 100))
 save(fitGBM, file="../output/fit_trainBaseline.RData")
 
 source("../lib/trainOurModel.R")
 dat_train <- dat_train %>% dplyr::select(b[1:700], emotion_idx)
-
 tm_train=NA
 tm_train <- system.time(fitSVM <- trainOurModel(trainingData = dat_train, desiredKernel = "linear", desiredCostRange = list(cost = c(.001,0.01,0,1,5,10,100))))
 save(fitSVM, file="../output/fit_trainOurModel.RData")
@@ -244,13 +245,13 @@ predictionGBM <- as.factor(apply(predictionGBM, 1, which.max))
 
 accuBaseline <- mean(dat_testBaseline$emotion_idx == predictionGBM)
 cat("The accuracy of baseline model: is", accuBaseline*100, "%.\n")
-confusionMatrix(predictionGBM, dat_test$emotion_idx)
+# confusionMatrix(predictionGBM, dat_test$emotion_idx)
 # unique(predictionGBM)
 # unique(dat_testBaseline$emotion_idx)
 
 accu <- mean(dat_test$emotion_idx == predictionSVM)
 cat("The accuracy of our model: is", accu*100, "%.\n")
-confusionMatrix(predictionSVM, dat_test$emotion_idx)
+# confusionMatrix(predictionSVM, dat_test$emotion_idx)
 # unique(predictionSVM)
 # unique(dat_test$emotion_idx)
 ```
