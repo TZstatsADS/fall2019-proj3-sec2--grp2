@@ -13,7 +13,10 @@ trainOurModel <- function(trainingData, desiredKernel, desiredCostRange){
   library("e1071")
   
   ### Train with SVM
-  fitSVM <- svm(emotion_idx ~ ., data=trainingData, kernel = desiredKernel, ranges = desiredCostRange)
+  fitSVM <- svm(as.factor(emotion_idx) ~ ., 
+                data=trainingData, 
+                kernel = desiredKernel, 
+                ranges = desiredCostRange)
 
   return(fitSVM)
 }
