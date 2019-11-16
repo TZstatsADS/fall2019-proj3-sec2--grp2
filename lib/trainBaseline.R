@@ -16,8 +16,11 @@ trainBaseline <- function(trainingData, desiredDistribution, desiredNumberOfTree
   ftGBM <- gbm(
     formula = as.factor(emotion_idx) ~ .,
     data = trainingData,
-    n.trees = desiredNumberOfTrees
-  )
+    distribution = desiredDistribution,
+    n.trees = desiredNumberOfTrees,
+    bag.fraction=0.65,
+    shrinkage = 0.1,
+    cv.folds=3)
 
   return(ftGBM)
 }
