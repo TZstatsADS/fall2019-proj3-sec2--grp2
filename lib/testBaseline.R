@@ -13,6 +13,6 @@ testBaseline <- function(model, testingData, ntrees){
   library("gbm")
   
   ### make predictions
-  predBaseline <- predict(model, testingData, n.trees = 150)
+  predBaseline <- predict(model, testingData, n.trees = 100)
   return(predBaseline)
 }
